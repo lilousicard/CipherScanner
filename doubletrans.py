@@ -50,7 +50,7 @@ def decrypt(ciphertext, key1, key2):
 
 def main():
     # Example usage with key1 and key2 as permutation of indices
-    message = "Hello, World!"
+    message = "Meeting postponed until 3pm."
     key1 = [1, 0, 2]  # Example key for first transposition
     key2 = [0, 2, 1]  # Example key for second transposition
 

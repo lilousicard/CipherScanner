@@ -1,3 +1,6 @@
+import random
+import string
+
 import onetimepad
 
 
@@ -13,9 +16,8 @@ def decrypt_message(ciphertext, key):
 
 def main():
     # Example usage
-    message = "Hello, World!"
-    key = "randomkey123"  # The key should be random and at least as long as the message
-
+    message = "MeetingPostponedUntil3pm"
+    key = ''.join(random.choices(string.ascii_letters, k=len(message)))  # The key should be random and at least as long as the message
     # Encrypt the message
     ciphertext = encrypt_message(message, key)
     print("Encrypted:", ciphertext)
@@ -23,6 +25,7 @@ def main():
     # Decrypt the ciphertext
     decrypted_text = decrypt_message(ciphertext, key)
     print("Decrypted:", decrypted_text)
+    print("Key:", key)
 
 
 if __name__ == "__main__":

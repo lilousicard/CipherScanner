@@ -47,12 +47,15 @@ def decrypt(ciphertext, key1, key2):
 
     return decrypted_message.replace('*', '').replace('_', ' ')  # Remove padding and replace underscores with spaces
 
+def append_to_file(cipher):
+    with open('data/data.txt', 'a') as file:
+        file.write('<'+ cipher + '>' + '<' + str(1) + '>' + '\n')
 
 def main():
     # Example usage with key1 and key2 as permutation of indices
-    message = "Meeting postponed until 3pm."
-    key1 = [1, 0, 2]  # Example key for first transposition
-    key2 = [0, 2, 1]  # Example key for second transposition
+    message = input("Enter the message: ")
+    key1 = list(map(int, input("Enter the first key (comma-separated numbers): ").split(',')))
+    key2 = list(map(int, input("Enter the second key (comma-separated numbers): ").split(',')))
 
     # Encrypt the message
     ciphertext = encrypt(message, key1, key2)
@@ -61,6 +64,7 @@ def main():
     # Decrypt the ciphertext
     decrypted_text = decrypt(ciphertext, key1, key2)
     print("Decrypted:", decrypted_text)
+    append_to_file(ciphertext)
 
 
 if __name__ == "__main__":

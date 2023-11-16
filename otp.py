@@ -16,7 +16,7 @@ def decrypt_message(ciphertext, key):
 
 def main():
     # Example usage
-    message = "MeetingPostponedUntil3pm"
+    message = "MeetingPostponedUntilThreepm"
     key = ''.join(random.choices(string.ascii_letters, k=len(message)))  # The key should be random and at least as long as the message
     # Encrypt the message
     ciphertext = encrypt_message(message, key)

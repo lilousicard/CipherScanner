@@ -110,13 +110,21 @@ def plot_letter_counts(letter_counts):
 
 
 
+# def main():
+#     filename = get_filename()
+#     filtered_content = read_and_filter(filename)
+#     letter_counts = count_letters(filtered_content)
+#     plot_letter_counts(letter_counts)
+#     sequence_probabilities = calculate_sequence_probabilities(filtered_content)
+#     display_sequence_probabilities(sequence_probabilities)
+#     display_heatmap(sequence_probabilities)
+
+def append_to_file(cipher, method):
+    with open('data/data.txt', 'a') as file:
+        file.write('<'+ cipher + '>' + '<' + str(method) + '>' + '\n')
 def main():
-    filename = get_filename()
-    filtered_content = read_and_filter(filename)
-    letter_counts = count_letters(filtered_content)
-    plot_letter_counts(letter_counts)
-    sequence_probabilities = calculate_sequence_probabilities(filtered_content)
-    display_sequence_probabilities(sequence_probabilities)
-    display_heatmap(sequence_probabilities)
+    append_to_file("Test", 1)
+    append_to_file("test2", 2)
+    append_to_file("test3", 3)
 
 main()

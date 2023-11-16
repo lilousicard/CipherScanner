@@ -36,15 +36,20 @@ def decrypt_message(ciphertext, key):
 
 def main():
     # Example usage
-    message = "MeetingPostponedUntilThreepm"
+    message = input("Enter the message: ")
     key = generate_key(message)
     print("Key:", key)
     # Encrypt the message
     ciphertext = encrypt_message(message, key)
     print("Encrypted:", ciphertext)
+    append_to_file(ciphertext)
     # Decrypt the ciphertext
     decrypted_text = decrypt_message(ciphertext, key)
     print("Decrypted:", decrypted_text)
+
+def append_to_file(cipher):
+    with open('data/data.txt', 'a') as file:
+        file.write('<'+ cipher + '>' + '<' + str(3) + '>' + '\n')
 
 if __name__ == "__main__":
     main()

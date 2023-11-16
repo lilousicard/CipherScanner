@@ -25,6 +25,9 @@ def decrypt(ciphertext, cipher_alphabet):
     plaintext = ciphertext.upper().translate(translation_table)
     return plaintext
 
+def append_to_file(cipher):
+    with open('data/data.txt', 'a') as file:
+        file.write('<'+ cipher + '>' + '<' + str(2) + '>' + '\n')
 
 # Accepting the key from the user
 key = input("Enter the key: ")
@@ -35,6 +38,7 @@ plaintext = input("Enter the plaintext: ")
 
 ciphertext = encrypt(plaintext, cipher_alphabet)
 print(f"Ciphertext: {ciphertext}")
+append_to_file(ciphertext)
 
 # Decrypting back
 decrypted_text = decrypt(ciphertext, cipher_alphabet)

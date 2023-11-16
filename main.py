@@ -116,6 +116,8 @@ def plot_letter_counts(letter_counts):
 def main():
     filename = get_filename()
     filtered_content = read_and_filter(filename)
+    #content = "eetMng_iostponep_undil_threT_pme***."
+    #filtered_content = ''.join(char.upper() for char in content if char.isalpha())
     letter_counts = count_letters(filtered_content)
     plot_letter_counts(letter_counts)
     sequence_probabilities = calculate_sequence_probabilities(filtered_content)

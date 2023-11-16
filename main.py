@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
+
 def get_filename():
     while True:
         filename = input("Please enter the filename: ")
@@ -12,11 +13,13 @@ def get_filename():
         else:
             print("File does not exist. Please try again.")
 
+
 def read_and_filter(filename):
     with open(filename, 'r') as file:
         content = file.read()
     filtered_content = ''.join(char.upper() for char in content if char.isalpha())
     return filtered_content
+
 
 def count_letters(string):
     letter_counts = {}
@@ -28,6 +31,7 @@ def count_letters(string):
                 letter_counts[char] = 1
     return letter_counts
 
+
 def calculate_sequence_probabilities(string):
     # Initialize a 26x26 2D array with all elements set to 0
     sequence_counts = np.zeros((26, 26))
@@ -37,7 +41,7 @@ def calculate_sequence_probabilities(string):
     for i in range(total_sequences):
         # Convert the letters to upper case and get their ASCII values
         first_letter = ord(string[i].upper()) - ord('A')
-        second_letter = ord(string[i+1].upper()) - ord('A')
+        second_letter = ord(string[i + 1].upper()) - ord('A')
 
         # Increment the corresponding element in the 2D array
         sequence_counts[first_letter][second_letter] += 1
@@ -52,7 +56,7 @@ def display_heatmap(sequence_probabilities):
     df = pd.DataFrame(sequence_probabilities)
 
     # Set the index and columns of the DataFrame to the letters of the alphabet
-    letters = [chr(i) for i in range(ord('A'), ord('Z')+1)]
+    letters = [chr(i) for i in range(ord('A'), ord('Z') + 1)]
     df.index = letters
     df.columns = letters
 
@@ -67,19 +71,20 @@ def display_sequence_probabilities(sequence_probabilities):
     df = pd.DataFrame(sequence_probabilities)
 
     # Set the index and columns of the DataFrame to the letters of the alphabet
-    letters = [chr(i) for i in range(ord('A'), ord('Z')+1)]
+    letters = [chr(i) for i in range(ord('A'), ord('Z') + 1)]
     df.index = letters
     df.columns = letters
 
     # Print the DataFrame to the console
     print(df)
 
+
 def display_sequence_probabilities(sequence_probabilities):
     # Convert the 2D array to a pandas DataFrame
     df = pd.DataFrame(sequence_probabilities)
 
     # Set the index and columns of the DataFrame to the letters of the alphabet
-    letters = [chr(i) for i in range(ord('A'), ord('Z')+1)]
+    letters = [chr(i) for i in range(ord('A'), ord('Z') + 1)]
     df.index = letters
     df.columns = letters
 
@@ -91,9 +96,10 @@ def display_sequence_probabilities(sequence_probabilities):
     ax.axis('off')
 
     # Create a table and add it to the plot
-    ax.table(cellText=df.values, colLabels=df.columns, rowLabels=df.index, cellLoc = 'center', loc='center')
+    ax.table(cellText=df.values, colLabels=df.columns, rowLabels=df.index, cellLoc='center', loc='center')
 
     plt.show()
+
 
 def plot_letter_counts(letter_counts):
     letters = list(letter_counts.keys())
@@ -107,24 +113,14 @@ def plot_letter_counts(letter_counts):
     plt.show()
 
 
-
-
-
-# def main():
-#     filename = get_filename()
-#     filtered_content = read_and_filter(filename)
-#     letter_counts = count_letters(filtered_content)
-#     plot_letter_counts(letter_counts)
-#     sequence_probabilities = calculate_sequence_probabilities(filtered_content)
-#     display_sequence_probabilities(sequence_probabilities)
-#     display_heatmap(sequence_probabilities)
-
-def append_to_file(cipher, method):
-    with open('data/data.txt', 'a') as file:
-        file.write('<'+ cipher + '>' + '<' + str(method) + '>' + '\n')
 def main():
-    append_to_file("Test", 1)
-    append_to_file("test2", 2)
-    append_to_file("test3", 3)
+    filename = get_filename()
+    filtered_content = read_and_filter(filename)
+    letter_counts = count_letters(filtered_content)
+    plot_letter_counts(letter_counts)
+    sequence_probabilities = calculate_sequence_probabilities(filtered_content)
+    display_sequence_probabilities(sequence_probabilities)
+    display_heatmap(sequence_probabilities)
+
 
 main()

@@ -1,4 +1,6 @@
 import os
+import re
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -19,7 +21,7 @@ def read_and_filter(filename):
 
     # Open the file in read mode
     with open(filename, 'r') as file:
-        #skip first two lines
+        # skip first two lines
         file.readline()
         file.readline()
         # Read each line in the file
@@ -33,7 +35,8 @@ def read_and_filter(filename):
             # Remove the angle brackets from cipher and method
             cipher = cipher[1:]  # Remove the first '<'
             method = method[:-1]  # Remove the last '>'
-
+            cipher = re.sub('[^A-Za-z]+', 'X', cipher)
+            cipher = cipher.upper()
             # Store the cipher and method in the dictionary
             ciphers[cipher] = int(method)  # Convert method to an integer
 
@@ -73,8 +76,8 @@ def calculate_sequence_probabilities(string):
 
 
 def display_heatmap(sequence_probabilities):
-    #Normalize the probabilities
-    total_sequences = sequence_probabilities.sum(axis=1)
+    # Normalize the probabilities
+    total_sequences = normalize_sequence_probabilities(sequence_probabilities)
     # Convert the 2D array to a pandas DataFrame
     df = pd.DataFrame(total_sequences)
 
@@ -84,22 +87,9 @@ def display_heatmap(sequence_probabilities):
     df.columns = letters
 
     # Create a heatmap
-    plt.figure(figsize=(10, 8))
+    plt.figure(figsize=(20, 15))
     sns.heatmap(df, annot=True, cmap='YlGnBu')
     plt.show()
-
-
-def display_sequence_probabilities(sequence_probabilities):
-    # Convert the 2D array to a pandas DataFrame
-    df = pd.DataFrame(sequence_probabilities)
-
-    # Set the index and columns of the DataFrame to the letters of the alphabet
-    letters = [chr(i) for i in range(ord('A'), ord('Z') + 1)]
-    df.index = letters
-    df.columns = letters
-
-    # Print the DataFrame to the console
-    print(df)
 
 
 def display_sequence_probabilities(sequence_probabilities):
@@ -136,14 +126,32 @@ def plot_letter_counts(letter_counts):
     plt.show()
 
 
+def normalize_sequence_probabilities(sequence_probabilities):
+    # Sum each row and reshape the result to a column vector
+    row_sums = sequence_probabilities.sum(axis=1).reshape(-1, 1)
+
+    # Avoid division by zero by replacing zero sums with one
+    row_sums[row_sums == 0] = 1
+
+    # Divide each row of the sequence_probabilities array by the sum of that row
+    normalized_probabilities = sequence_probabilities / row_sums
+
+    return normalized_probabilities
+
+
 def main():
     filename = get_filename()
     ciphers = read_and_filter(filename)
-    #letter_counts = count_letters(filtered_content)
-    #plot_letter_counts(letter_counts)
-    #sequence_probabilities = calculate_sequence_probabilities(filtered_content)
-    #display_sequence_probabilities(sequence_probabilities)
-    #display_heatmap(sequence_probabilities)
+    for cipher in ciphers:
+        letter_count = count_letters(cipher)
+        plot_letter_counts(letter_count)
+        sequence_probabilities = calculate_sequence_probabilities(cipher)
+        #display_heatmap(sequence_probabilities)
+    # letter_counts = count_letters(filtered_content)
+    # plot_letter_counts(letter_counts)
+    # sequence_probabilities = calculate_sequence_probabilities(filtered_content)
+    # display_sequence_probabilities(sequence_probabilities)
+    # display_heatmap(sequence_probabilities)
 
 
 main()

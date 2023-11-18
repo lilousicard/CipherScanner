@@ -15,10 +15,31 @@ def get_filename():
 
 
 def read_and_filter(filename):
+    ciphers = {}
+
+    # Open the file in read mode
     with open(filename, 'r') as file:
-        content = file.read()
-    filtered_content = ''.join(char.upper() for char in content if char.isalpha())
-    return filtered_content
+        #skip first two lines
+        file.readline()
+        file.readline()
+        # Read each line in the file
+        for line in file:
+            # Strip newline and any extra whitespace
+            line = line.strip()
+
+            # Split the line to separate cipher and method
+            cipher, method = line.split('><')
+
+            # Remove the angle brackets from cipher and method
+            cipher = cipher[1:]  # Remove the first '<'
+            method = method[:-1]  # Remove the last '>'
+
+            # Store the cipher and method in the dictionary
+            ciphers[cipher] = int(method)  # Convert method to an integer
+
+    # Print the dictionary to verify
+    print(ciphers)
+    return ciphers
 
 
 def count_letters(string):
@@ -52,8 +73,10 @@ def calculate_sequence_probabilities(string):
 
 
 def display_heatmap(sequence_probabilities):
+    #Normalize the probabilities
+    total_sequences = sequence_probabilities.sum(axis=1)
     # Convert the 2D array to a pandas DataFrame
-    df = pd.DataFrame(sequence_probabilities)
+    df = pd.DataFrame(total_sequences)
 
     # Set the index and columns of the DataFrame to the letters of the alphabet
     letters = [chr(i) for i in range(ord('A'), ord('Z') + 1)]
@@ -115,14 +138,12 @@ def plot_letter_counts(letter_counts):
 
 def main():
     filename = get_filename()
-    filtered_content = read_and_filter(filename)
-    #content = "eetMng_iostponep_undil_threT_pme***."
-    #filtered_content = ''.join(char.upper() for char in content if char.isalpha())
-    letter_counts = count_letters(filtered_content)
-    plot_letter_counts(letter_counts)
-    sequence_probabilities = calculate_sequence_probabilities(filtered_content)
-    display_sequence_probabilities(sequence_probabilities)
-    display_heatmap(sequence_probabilities)
+    ciphers = read_and_filter(filename)
+    #letter_counts = count_letters(filtered_content)
+    #plot_letter_counts(letter_counts)
+    #sequence_probabilities = calculate_sequence_probabilities(filtered_content)
+    #display_sequence_probabilities(sequence_probabilities)
+    #display_heatmap(sequence_probabilities)
 
 
 main()

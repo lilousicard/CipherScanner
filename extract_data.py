@@ -41,18 +41,19 @@ def read_and_filter(filename):
             ciphers[cipher] = int(method)  # Convert method to an integer
 
     # Print the dictionary to verify
-    print(ciphers)
+    # print(ciphers)
     return ciphers
 
 
 def count_letters(string):
-    letter_counts = {}
+    letter_counts = {chr(i): 0 for i in range(ord('A'), ord('Z') + 1)}
+    total_letters = 0
     for char in string:
         if char.isalpha():
-            if char in letter_counts:
-                letter_counts[char] += 1
-            else:
-                letter_counts[char] = 1
+            total_letters += 1
+            letter_counts[char] += 1
+    for letter, count in letter_counts.items():
+        letter_counts[letter] = count / total_letters
     return letter_counts
 
 
@@ -70,16 +71,17 @@ def calculate_sequence_probabilities(string):
         # Increment the corresponding element in the 2D array
         sequence_counts[first_letter][second_letter] += 1
 
-    # Calculate the probabilities
+    # Normalize the counts to get probabilities
+    sequence_probabilities = normalize_sequence_probabilities(sequence_counts)
 
-    return sequence_counts
+    return sequence_probabilities
 
 
 def display_heatmap(sequence_probabilities):
     # Normalize the probabilities
-    total_sequences = normalize_sequence_probabilities(sequence_probabilities)
+    #total_sequences = normalize_sequence_probabilities(sequence_probabilities)
     # Convert the 2D array to a pandas DataFrame
-    df = pd.DataFrame(total_sequences)
+    df = pd.DataFrame(sequence_probabilities)
 
     # Set the index and columns of the DataFrame to the letters of the alphabet
     letters = [chr(i) for i in range(ord('A'), ord('Z') + 1)]
@@ -140,18 +142,13 @@ def normalize_sequence_probabilities(sequence_probabilities):
 
 
 def main():
-    filename = get_filename()
+    filename = "data/data.txt"
     ciphers = read_and_filter(filename)
     for cipher in ciphers:
         letter_count = count_letters(cipher)
         plot_letter_counts(letter_count)
         sequence_probabilities = calculate_sequence_probabilities(cipher)
-        #display_heatmap(sequence_probabilities)
-    # letter_counts = count_letters(filtered_content)
-    # plot_letter_counts(letter_counts)
-    # sequence_probabilities = calculate_sequence_probabilities(filtered_content)
-    # display_sequence_probabilities(sequence_probabilities)
-    # display_heatmap(sequence_probabilities)
+        display_heatmap(sequence_probabilities)
 
 
 main()

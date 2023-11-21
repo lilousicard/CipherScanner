@@ -151,4 +151,4 @@ def main():
         display_heatmap(sequence_probabilities)
 
 
-main()
+#main()

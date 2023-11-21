@@ -3,7 +3,7 @@ from sklearn.model_selection import train_test_split
 from extract_data import count_letters, calculate_sequence_probabilities, read_and_filter
 from sklearn import metrics
 
-# Assuming ciphers is a dictionary where the keys are the ciphers and the values are the letter counts
+# Assuming ciphers is a dictionary where the keys are the ciphers and the values are encryption method
 filename = "data/data.txt"
 ciphers = read_and_filter(filename)
 
@@ -19,7 +19,7 @@ for cipher in ciphers.keys():
     X_letters.append(letter_counts)
     X_bigrams.append(list(bigram_probabilities))
 
-# Create a label vector (this would depend on your specific use case)
+# Create a label vector (The cipher type is the label)
 y = list(ciphers.values())
 
 # Split the data into training and testing sets

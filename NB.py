@@ -1,16 +1,16 @@
-import seaborn as sns
 from sklearn import metrics
-from sklearn import svm
-from sklearn.metrics import confusion_matrix
+from sklearn.naive_bayes import GaussianNB
 from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
 from extract_data import count_letters, calculate_sequence_probabilities, read_and_filter
+import matplotlib.pyplot as plt
 
-# Assuming ciphers is a dictionary where the keys are the ciphers and the values are encryption method
+# Assuming ciphers is a dictionary where the keys are the ciphers and the values are the encryption method
 filename = "data/data.txt"
 ciphers = read_and_filter(filename)
 
-# Prepare the data for the three models
+# Prepare the data for the Naive Bayes
 X_both = []
 X_letters = []
 X_bigrams = []
@@ -26,19 +26,18 @@ for cipher in ciphers.keys():
 y = list(ciphers.values())
 
 # Split the data into training and testing sets
-X_train_both, X_test_both, y_train, y_test = train_test_split(X_both, y, test_size=0.2, random_state=42)
-# We only need X_train and X_test
-X_train_letters, X_test_letters = train_test_split(X_letters, test_size=0.2, random_state=42)[:2]
-X_train_bigrams, X_test_bigrams = train_test_split(X_bigrams, test_size=0.2, random_state=42)[:2]
+X_train_both, X_test_both, y_train, y_test = train_test_split(X_both, y, test_size=0.25, random_state=42)
+X_train_letters, X_test_letters = train_test_split(X_letters, test_size=0.25, random_state=42)[:2]
+X_train_bigrams, X_test_bigrams = train_test_split(X_bigrams, test_size=0.25, random_state=42)[:2]
 
-# Train the SVMs
-clf_both = svm.SVC()
+# Train the Naive Bayes
+clf_both = GaussianNB()
 clf_both.fit(X_train_both, y_train)
 
-clf_letters = svm.SVC()
+clf_letters = GaussianNB()
 clf_letters.fit(X_train_letters, y_train)
 
-clf_bigrams = svm.SVC()
+clf_bigrams = GaussianNB()
 clf_bigrams.fit(X_train_bigrams, y_train)
 
 # Predict the labels of the test set

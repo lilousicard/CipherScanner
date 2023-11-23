@@ -1,8 +1,11 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Flatten, Conv1D, MaxPooling1D
 from tensorflow.keras.utils import to_categorical
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
 from extract_data import count_letters, calculate_sequence_probabilities, read_and_filter
 
 # Assuming ciphers is a dictionary where the keys are the ciphers and the values are the encryption method
@@ -28,24 +31,59 @@ y = list(ciphers.values())
 y = to_categorical(y)
 
 # Split the data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
 
 # Define the architecture of the CNN
 model = Sequential()
 model.add(Conv1D(32, 2, activation='relu', input_shape=X_train[0].shape))
 model.add(MaxPooling1D(2))
 model.add(Flatten())
-model.add(Dense(64, activation='relu'))
-model.add(Dense(y.shape[1], activation='softmax'))  # Change this to match the number of classes
+model.add(Dense(64, activation='linear'))
+model.add(Dense(y.shape[1], activation='softmax'))
 
 # Compile the model
-model.compile(optimizer='adam', loss='categorical_crossentropy',
-              metrics=['accuracy'])  # Change the loss to 'categorical_crossentropy'
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
 # Train the model
-model.fit(X_train, y_train, epochs=100, validation_data=(X_test, y_test))
+history = model.fit(X_train, y_train, epochs=100, validation_data=(X_test, y_test))
 
 # Evaluate the model
 loss, accuracy = model.evaluate(X_test, y_test)
 print("Loss:", loss)
 print("Accuracy:", accuracy)
+
+# Plotting the loss
+plt.figure(figsize=(10, 5))
+plt.subplot(1, 2, 1)
+plt.plot(history.history['loss'], label='Training Loss')
+plt.plot(history.history['val_loss'], label='Validation Loss')
+plt.title('Loss Over Epochs')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.legend()
+
+# Plotting the accuracy
+plt.subplot(1, 2, 2)
+plt.plot(history.history['accuracy'], label='Training Accuracy')
+plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
+plt.title('Accuracy Over Epochs')
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
+
+# Show Confusion Matrix
+cm = confusion_matrix(np.argmax(y_test, axis=1), np.argmax(model.predict(X_test), axis=1))
+plt.figure(figsize=(10, 10))
+
+ax = sns.heatmap(cm, annot=True, square=True, cmap='Blues', cbar=False, xticklabels=['DT', 'SS', 'OTP'],
+                 yticklabels=['DT', 'SS', 'OTP'])
+ax.set_title('Confusion Matrix for Both Features')
+ax.set_xlabel('Predicted')
+ax.set_ylabel('Actual')
+
+# Show the plot
+plt.tight_layout()
+plt.show()

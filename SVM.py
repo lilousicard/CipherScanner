@@ -32,13 +32,13 @@ X_train_letters, X_test_letters = train_test_split(X_letters, test_size=0.2, ran
 X_train_bigrams, X_test_bigrams = train_test_split(X_bigrams, test_size=0.2, random_state=42)[:2]
 
 # Train the SVMs
-clf_both = svm.SVC()
+clf_both = svm.SVC(C=5, kernel='rbf', degree=2)
 clf_both.fit(X_train_both, y_train)
 
-clf_letters = svm.SVC()
+clf_letters = svm.SVC(C=5, kernel='rbf', degree=2)
 clf_letters.fit(X_train_letters, y_train)
 
-clf_bigrams = svm.SVC()
+clf_bigrams = svm.SVC(C=5, kernel='rbf', degree=2)
 clf_bigrams.fit(X_train_bigrams, y_train)
 
 # Predict the labels of the test set
@@ -76,13 +76,13 @@ fig, ax = plt.subplots(2, 1, figsize=(15, 15))
 
 # Create accuracy subplot
 ax[0].bar(labels, accuracy)
-ax[0].set_title('Accuracy for Different Feature Sets using NB')
+ax[0].set_title('Accuracy for Different Feature Sets using SVM')
 ax[0].set_xlabel('Feature Set')
 ax[0].set_ylabel('Accuracy')
 
 # Create recall subplot
 ax[1].bar(labels, recall)
-ax[1].set_title('Recall for Different Feature Sets using NB')
+ax[1].set_title('Recall for Different Feature Sets using SVM')
 ax[1].set_xlabel('Feature Set')
 ax[1].set_ylabel('Recall')
 

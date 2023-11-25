@@ -1,11 +1,13 @@
-import numpy as np
 import matplotlib.pyplot as plt
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Flatten, Conv1D, MaxPooling1D
-from tensorflow.keras.utils import to_categorical
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix
+import numpy as np
 import seaborn as sns
+from keras.src.optimizers import Adam
+from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.layers import Dense, Flatten, Conv1D, MaxPooling1D
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.utils import to_categorical
+
 from extract_data import count_letters, calculate_sequence_probabilities, read_and_filter
 
 # Assuming ciphers is a dictionary where the keys are the ciphers and the values are the encryption method
@@ -41,8 +43,10 @@ model.add(Flatten())
 model.add(Dense(64, activation='linear'))
 model.add(Dense(y.shape[1], activation='softmax'))
 
+optimizer = Adam(learning_rate=0.001)
+
 # Compile the model
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
 
 # Train the model
 history = model.fit(X_train, y_train, epochs=100, validation_data=(X_test, y_test))

@@ -31,13 +31,13 @@ X_train_letters, X_test_letters = train_test_split(X_letters, test_size=0.25, ra
 X_train_bigrams, X_test_bigrams = train_test_split(X_bigrams, test_size=0.25, random_state=42)[:2]
 
 # Train the Naive Bayes
-clf_both = GaussianNB()
+clf_both = GaussianNB(var_smoothing=1e-1)
 clf_both.fit(X_train_both, y_train)
 
-clf_letters = GaussianNB()
+clf_letters = GaussianNB(var_smoothing=1e-1)
 clf_letters.fit(X_train_letters, y_train)
 
-clf_bigrams = GaussianNB()
+clf_bigrams = GaussianNB(var_smoothing=1e-1)
 clf_bigrams.fit(X_train_bigrams, y_train)
 
 # Predict the labels of the test set
